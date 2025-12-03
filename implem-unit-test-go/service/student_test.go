@@ -13,25 +13,25 @@ import (
 
 // Helper function untuk membuat service dan mock repository
 func newTestService() (*StudentService, *repository.MockStudentRepository) {
-	mokeRepo := new(repository.MockStudentRepository)
-	service := NewStudentService(mokeRepo)
-	return service, mokeRepo
+	mockRepo := new(repository.MockStudentRepository)
+	service := NewStudentService(mockRepo)
+	return service, mockRepo
 }
 
 // Test StudentService.GetAll
 func TestStudentService_GetAll_Success(t *testing.T) {
-	initial := []model.Student{
+	expected := []model.Student{
 		{ID: 1, Name: "Andi", Age: 21},
 		{ID: 2, Name: "Siti", Age: 22},
 	}
 	svc, repo := newTestService()
 	// Harapkan GetAll dipanggil dan mengembalikan initial data dan nil error
-	repo.On("GetAll").Return(initial, nil).Once()
+	repo.On("GetAll").Return(expected, nil).Once()
 
 	students, err := svc.GetAll()
 
 	assert.NoError(t, err)
-	assert.Equal(t, initial, students)
+	assert.Equal(t, expected, students)
 	repo.AssertExpectations(t)
 }
 
